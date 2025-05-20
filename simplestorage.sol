@@ -18,6 +18,8 @@ contract SimpleStorage {
     User[] public users;
 
     event TaskCreated(string indexed _title, uint balance, string _deadline, address indexed _ownerAddress, bool _isCompleted);
+    event TaskUpdated(bool _isCompleted);
+    event UserRewarded(bool _isCompleted);
 
     function createTask (string memory _title, string memory _deadline, address _ownerAddress) public {
         users.push(User({title: _title, balance: 0 ether, deadline: _deadline, ownerAddress: _ownerAddress, isCompleted: false}));
@@ -33,6 +35,8 @@ contract SimpleStorage {
         require(users[_index].ownerAddress == msg.sender, "Not the owner");
         users[_index].isCompleted = true;
         rewardUser(_index);
+        emit TaskUpdated(true);
+        emit UserRewarded(true);
     }
 
     function get(uint _index) public view returns (string memory, uint256, string memory, address, bool) {
