@@ -15,18 +15,17 @@ contract SimpleStorage {
         bool isCompleted;
     }
 
-    mapping(address => uint256) private balance;
-
     User[] public users;
 
+    event TaskCreated(string indexed _title, uint balance, string _deadline, address indexed _ownerAddress, bool _isCompleted);
 
     function createTask (string memory _title, string memory _deadline, address _ownerAddress) public {
         users.push(User({title: _title, balance: 0 ether, deadline: _deadline, ownerAddress: _ownerAddress, isCompleted: false}));
+        emit TaskCreated(_title, 0 ether, _deadline, _ownerAddress, false);
     }
 
     function rewardUser (uint256 _index) internal {
         require(users[_index].isCompleted == true, "Complete your task");
-        balance[users[_index].ownerAddress] += reward;
         users[_index].balance += reward;
     }
 
